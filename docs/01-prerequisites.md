@@ -14,6 +14,13 @@ This tutorial leverages the [Google Cloud Platform](https://cloud.google.com/) t
 
 Follow the Google Cloud SDK [documentation](https://cloud.google.com/sdk/) to install and configure the `gcloud` command line utility.
 
+---
+#### My steps:
+![[GCP - gcloud CLI#Install]]
+
+
+---
+
 Verify the Google Cloud SDK version is 338.0.0 or higher:
 
 ```
@@ -30,25 +37,39 @@ If you are using the `gcloud` command-line tool for the first time `init` is the
 gcloud init
 ```
 
+---
+#### My steps:
+![[GCP - gcloud CLI#Configure defaults]]
+
+---
+
 Then be sure to authorize gcloud to access the Cloud Platform with your Google user credentials:
 
 ```
 gcloud auth login
 ```
 
-Next set a default compute region and compute zone:
+---
+#### My steps:
+![[GCP - gcloud CLI#Login and authorize my account to GCP]]
 
-```
-gcloud config set compute/region us-west1
-```
+---
 
-Set a default compute zone:
+DID NOT RUN THE BELOW SINCE I ALREADY CONFIGURED THROUGH `gcloud init`
 
-```
-gcloud config set compute/zone us-west1-c
-```
-
-> Use the `gcloud compute zones list` command to view additional regions and zones.
+	Next set a default compute region and compute zone:
+	
+	```
+	gcloud config set compute/region us-west1
+	```
+	
+	Set a default compute zone:
+	
+	```
+	gcloud config set compute/zone us-west1-c
+	```
+	
+> 	Use the `gcloud compute zones list` command to view additional regions and zones.
 
 ## Running Commands in Parallel with tmux
 
