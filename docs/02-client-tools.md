@@ -32,17 +32,17 @@ brew install cfssl
 
 ### Linux
 
-```
+```bash
 wget -q --show-progress --https-only --timestamping \
   https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssl \
   https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/1.4.1/linux/cfssljson
 ```
 
-```
+```bash
 chmod +x cfssl cfssljson
 ```
 
-```
+```bash
 sudo mv cfssl cfssljson /usr/local/bin/
 ```
 
@@ -50,7 +50,7 @@ sudo mv cfssl cfssljson /usr/local/bin/
 
 Verify `cfssl` and `cfssljson` version 1.4.1 or higher is installed:
 
-```
+```bash
 cfssl version
 ```
 
@@ -61,7 +61,7 @@ Version: 1.4.1
 Runtime: go1.12.12
 ```
 
-```
+```bash
 cfssljson --version
 ```
 ```
@@ -89,15 +89,15 @@ sudo mv kubectl /usr/local/bin/
 
 ### Linux
 
-```
+```bash
 wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
 ```
 
-```
+```bash
 chmod +x kubectl
 ```
 
-```
+```bash
 sudo mv kubectl /usr/local/bin/
 ```
 
@@ -105,8 +105,12 @@ sudo mv kubectl /usr/local/bin/
 
 Verify `kubectl` version 1.21.0 or higher is installed:
 
-```
+```bash
 kubectl version --client
+```
+OR
+```bash
+kubeclt version --client --output=json
 ```
 
 > output

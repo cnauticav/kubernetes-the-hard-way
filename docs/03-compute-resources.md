@@ -16,19 +16,46 @@ In this section a dedicated [Virtual Private Cloud](https://cloud.google.com/com
 
 Create the `kubernetes-the-hard-way` custom VPC network:
 
-```
+```bash
 gcloud compute networks create kubernetes-the-hard-way --subnet-mode custom
 ```
+
+---
+#### My steps:
+> Output:
+```bash
+Created [https://www.googleapis.com/compute/v1/projects/sb-sandbox4cv/global/networks/kubernetes-the-hard-way].
+NAME                     SUBNET_MODE  BGP_ROUTING_MODE  IPV4_RANGE  GATEWAY_IPV4
+kubernetes-the-hard-way  CUSTOM       REGIONAL
+
+Instances on this network will not be reachable until firewall rules
+are created. As an example, you can allow all internal traffic between
+instances as well as SSH, RDP, and ICMP by running:
+
+$ gcloud compute firewall-rules create <FIREWALL_NAME> --network kubernetes-the-hard-way --allow tcp,udp,icmp --source-ranges <IP_RANGE>
+$ gcloud compute firewall-rules create <FIREWALL_NAME> --network kubernetes-the-hard-way --allow tcp:22,tcp:3389,icmp
+```
+---
 
 A [subnet](https://cloud.google.com/compute/docs/vpc/#vpc_networks_and_subnets) must be provisioned with an IP address range large enough to assign a private IP address to each node in the Kubernetes cluster.
 
 Create the `kubernetes` subnet in the `kubernetes-the-hard-way` VPC network:
 
-```
+```bash
 gcloud compute networks subnets create kubernetes \
   --network kubernetes-the-hard-way \
   --range 10.240.0.0/24
 ```
+
+---
+#### My steps:
+> Output:
+```bash
+Created [https://www.googleapis.com/compute/v1/projects/sb-sandbox4cv/regions/us-east4/subnetworks/kubernetes].
+NAME        REGION    NETWORK                  RANGE          STACK_TYPE  IPV6_ACCESS_TYPE  INTERNAL_IPV6_PREFIX  EXTERNAL_IPV6_PREFIX
+kubernetes  us-east4  kubernetes-the-hard-way  10.240.0.0/24  IPV4_ONLY
+```
+---
 
 > The `10.240.0.0/24` IP address range can host up to 254 compute instances.
 
@@ -36,27 +63,49 @@ gcloud compute networks subnets create kubernetes \
 
 Create a firewall rule that allows internal communication across all protocols:
 
-```
+```bash
 gcloud compute firewall-rules create kubernetes-the-hard-way-allow-internal \
   --allow tcp,udp,icmp \
   --network kubernetes-the-hard-way \
   --source-ranges 10.240.0.0/24,10.200.0.0/16
 ```
 
+---
+#### My steps:
+> Output:
+```bash
+Creating firewall...⠹Created [https://www.googleapis.com/compute/v1/projects/sb-sandbox4cv/global/firewalls/kubernetes-the-hard-way-allow-internal].
+Creating firewall...done.
+NAME                                    NETWORK                  DIRECTION  PRIORITY  ALLOW         DENY  DISABLED
+kubernetes-the-hard-way-allow-internal  kubernetes-the-hard-way  INGRESS    1000      tcp,udp,icmp        False
+```
+---
+
 Create a firewall rule that allows external SSH, ICMP, and HTTPS:
 
-```
+```bash
 gcloud compute firewall-rules create kubernetes-the-hard-way-allow-external \
   --allow tcp:22,tcp:6443,icmp \
   --network kubernetes-the-hard-way \
   --source-ranges 0.0.0.0/0
 ```
 
+---
+#### My steps:
+> Output:
+```bash
+Creating firewall...⠹Created [https://www.googleapis.com/compute/v1/projects/sb-sandbox4cv/global/firewalls/kubernetes-the-hard-way-allow-external].
+Creating firewall...done.
+NAME                                    NETWORK                  DIRECTION  PRIORITY  ALLOW                 DENY  DISABLED
+kubernetes-the-hard-way-allow-external  kubernetes-the-hard-way  INGRESS    1000      tcp:22,tcp:6443,icmp        False
+```
+---
+
 > An [external load balancer](https://cloud.google.com/compute/docs/load-balancing/network/) will be used to expose the Kubernetes API Servers to remote clients.
 
 List the firewall rules in the `kubernetes-the-hard-way` VPC network:
 
-```
+```bash
 gcloud compute firewall-rules list --filter="network:kubernetes-the-hard-way"
 ```
 
@@ -72,14 +121,14 @@ kubernetes-the-hard-way-allow-internal  kubernetes-the-hard-way  INGRESS    1000
 
 Allocate a static IP address that will be attached to the external load balancer fronting the Kubernetes API Servers:
 
-```
+```bash
 gcloud compute addresses create kubernetes-the-hard-way \
   --region $(gcloud config get-value compute/region)
 ```
 
 Verify the `kubernetes-the-hard-way` static IP address was created in your default compute region:
 
-```
+```bash
 gcloud compute addresses list --filter="name=('kubernetes-the-hard-way')"
 ```
 
@@ -98,11 +147,11 @@ The compute instances in this lab will be provisioned using [Ubuntu Server](http
 
 Create three compute instances which will host the Kubernetes control plane:
 
-```
+```bash
 for i in 0 1 2; do
   gcloud compute instances create controller-${i} \
     --async \
-    --boot-disk-size 200GB \
+    --boot-disk-size 50GB \
     --can-ip-forward \
     --image-family ubuntu-2004-lts \
     --image-project ubuntu-os-cloud \
