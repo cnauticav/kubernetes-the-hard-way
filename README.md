@@ -32,7 +32,7 @@ This tutorial assumes you have access to the [Google Cloud Platform](https://clo
 - [x] README
 - [x] [Prerequisites](docs/01-prerequisites.md)
 - [x] [Installing the Client Tools](docs/02-client-tools.md)
-- [ ] [Provisioning Compute Resources](docs/03-compute-resources.md)
+- [x] [Provisioning Compute Resources](docs/03-compute-resources.md)
 - [ ] [Provisioning the CA and Generating TLS Certificates](docs/04-certificate-authority.md)
 - [ ] [Generating Kubernetes Configuration Files for Authentication](docs/05-kubernetes-configuration-files.md)
 - [ ] [Generating the Data Encryption Config and Key](docs/06-data-encryption-keys.md)
